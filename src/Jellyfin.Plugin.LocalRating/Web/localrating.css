@@ -1,0 +1,644 @@
+:root {
+    --jlr-surface: var(--darkerGradientPoint, var(--jf-palette-background-paper, #202020));
+    --jlr-accent: var(--activeColor, var(--jf-palette-primary-main, #00a4dc));
+    --jlr-accent-bright: var(--uiAccentColor, var(--jf-palette-primary-main, #00a4dc));
+    --jlr-text: var(--jf-palette-text-primary, #fff);
+}
+
+.jlr-panel {
+    box-sizing: border-box;
+    width: calc(100% - 4rem);
+    max-width: 58rem;
+    margin: 1.4rem auto;
+    padding: 1.15rem 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-color: color-mix(in srgb, var(--jlr-text) 18%, transparent);
+    border-radius: 0.65rem;
+    background: rgba(32, 32, 32, 0.72);
+    background: color-mix(in srgb, var(--jlr-surface) 72%, transparent);
+    -webkit-backdrop-filter: blur(0.8rem) saturate(1.08);
+    backdrop-filter: blur(0.8rem) saturate(1.08);
+    box-shadow: 0 0.5rem 1.4rem rgba(0, 0, 0, 0.22);
+    color: var(--jlr-text);
+}
+
+.jlr-panel [hidden] {
+    display: none !important;
+}
+
+.detailPagePrimaryContent > .jlr-panel-native {
+    width: 100%;
+    max-width: none;
+    margin: 1.4rem 0;
+}
+
+.jlr-panel-narrow {
+    margin-top: calc(var(--jlr-narrow-clearance, 0px) + 1.4rem);
+}
+
+.jlr-title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.jlr-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.jlr-rating-status {
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    font-size: 0.9rem;
+}
+
+.jlr-current-rating {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.jlr-current-rating-label,
+.jlr-current-rating-state {
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.jlr-current-rating-value {
+    padding: 0.3rem 0.62rem;
+    border: 1px solid color-mix(in srgb, var(--jlr-accent-bright) 48%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--jlr-accent) 22%, transparent);
+    font-size: 0.95rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.jlr-current-rating-pending .jlr-current-rating-value {
+    border-style: dashed;
+}
+
+.jlr-rating-status {
+    min-height: 1.4rem;
+    margin-top: 0.45rem;
+}
+
+.jlr-rating-row,
+.jlr-action-buttons,
+.jlr-review-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.jlr-rating-grid {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(2.1rem, 1fr));
+    gap: 0.35rem;
+    width: min(34rem, 100%);
+}
+
+.jlr-rating-button,
+.jlr-clear-button,
+.jlr-save-button,
+.jlr-cancel-button,
+.jlr-edit-button,
+.jlr-expand-button {
+    min-height: 2.25rem;
+    border: 1px solid color-mix(in srgb, var(--jlr-text) 20%, transparent);
+    border-radius: 0.38rem;
+    background: color-mix(in srgb, var(--jlr-text) 8%, transparent);
+    color: inherit;
+    cursor: pointer;
+}
+
+.jlr-rating-button:hover,
+.jlr-rating-button.jlr-selected {
+    border-color: var(--jlr-accent-bright);
+    background: var(--jlr-accent);
+    color: var(--jlr-text);
+}
+
+.jlr-rating-button:focus-visible,
+.jlr-clear-button:focus-visible,
+.jlr-save-button:focus-visible,
+.jlr-cancel-button:focus-visible,
+.jlr-edit-button:focus-visible,
+.jlr-expand-button:focus-visible,
+.jlr-review-input:focus-visible {
+    outline: 2px solid var(--jlr-accent-bright);
+    outline-offset: 2px;
+}
+
+.jlr-review-heading-row,
+.jlr-review-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.jlr-review-heading-row {
+    justify-content: space-between;
+    margin-top: 0.9rem;
+}
+
+.jlr-review-heading-actions {
+    justify-content: flex-end;
+}
+
+.jlr-review-label {
+    font-weight: 600;
+}
+
+.jlr-review-read-status {
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    font-size: 0.9rem;
+}
+
+.jlr-review-times {
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.jlr-review-editor {
+    margin-top: 0.55rem;
+}
+
+.jlr-review-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 12rem;
+    max-height: none;
+    resize: none;
+    overflow-y: hidden;
+    padding: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--jlr-text) 25%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--jlr-surface) 92%, var(--jlr-text));
+    color: var(--jlr-text);
+    font: inherit;
+    line-height: 1.6;
+}
+
+.jlr-review-meta {
+    justify-content: space-between;
+    margin-top: 0.45rem;
+    min-height: 1.4rem;
+    color: color-mix(in srgb, var(--jlr-text) 76%, transparent);
+    font-size: 0.9rem;
+}
+
+.jlr-review-dirty .jlr-review-status {
+    color: color-mix(in srgb, var(--jlr-accent-bright) 76%, var(--jlr-text));
+}
+
+.jlr-actions {
+    margin-top: 0.5rem;
+    position: sticky;
+    bottom: max(0.5rem, env(safe-area-inset-bottom));
+    z-index: 5;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--jlr-surface);
+}
+
+.jlr-action-buttons { margin-top: 0.65rem; }
+.jlr-review-meta { align-items: flex-start; flex-wrap: nowrap; }
+.jlr-review-status { overflow-wrap: anywhere; }
+.jlr-count { flex-shrink: 0; white-space: nowrap; }
+.jlr-review-status.jlr-status-error { color: var(--jf-palette-error-main, #e97070); }
+.jlr-review-input::placeholder { color: color-mix(in srgb, var(--jlr-text) 60%, transparent); opacity: 1; }
+
+.jlr-library-bounds {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.jlr-library-bounds[hidden],
+.jlr-library-bounds > [hidden] {
+    display: none;
+}
+
+.jlr-library-bounds > span {
+    white-space: nowrap;
+    font-size: 0.85rem;
+}
+
+.jlr-clear-button,
+.jlr-save-button,
+.jlr-cancel-button,
+.jlr-edit-button {
+    padding: 0.45rem 1rem;
+}
+
+.jlr-edit-button {
+    min-height: 2rem;
+    padding-block: 0.3rem;
+}
+
+.jlr-save-button {
+    border-color: var(--jlr-accent-bright);
+    background: var(--jlr-accent);
+    font-weight: 600;
+}
+
+.jlr-save-button:disabled,
+.jlr-clear-button:disabled,
+.jlr-cancel-button:disabled {
+    cursor: default;
+    opacity: 0.55;
+}
+
+.jlr-rating-badge {
+    position: absolute;
+    z-index: 4;
+    top: 0.38rem;
+    right: 0.38rem;
+    padding: 0.24rem 0.46rem;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-color: color-mix(in srgb, var(--jlr-text) 45%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--jlr-accent) 86%, transparent);
+    box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.5);
+    color: var(--jlr-text);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.jlr-library-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 100%;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    box-sizing: border-box;
+    max-width: 64rem;
+    margin: 0.4rem auto 0;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--jlr-text) 16%, transparent);
+    border-radius: 0.65rem;
+    background: color-mix(in srgb, var(--jlr-surface) 68%, transparent);
+    -webkit-backdrop-filter: blur(0.7rem) saturate(1.05);
+    backdrop-filter: blur(0.7rem) saturate(1.05);
+    color: var(--jlr-text);
+}
+
+.jlr-library-controls.jlr-library-active {
+    border-color: color-mix(in srgb, var(--jlr-accent-bright) 42%, transparent);
+}
+
+.jlr-library-controls [hidden] {
+    display: none !important;
+}
+
+.jlr-library-heading {
+    margin-right: 0.2rem;
+    white-space: nowrap;
+}
+
+.jlr-library-field,
+.jlr-library-paging {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.jlr-library-field {
+    color: color-mix(in srgb, var(--jlr-text) 76%, transparent);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.jlr-library-select,
+.jlr-library-button,
+.jlr-library-page-button {
+    min-height: 2.25rem;
+    box-sizing: border-box;
+    border: 1px solid color-mix(in srgb, var(--jlr-text) 18%, transparent);
+    border-radius: 0.38rem;
+    background: color-mix(in srgb, var(--jlr-text) 8%, transparent);
+    color: var(--jlr-text);
+    font: inherit;
+}
+
+.jlr-library-select {
+    padding: 0.35rem 2rem 0.35rem 0.65rem;
+}
+
+.jlr-library-select option {
+    background: var(--jlr-surface);
+    color: var(--jlr-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    @supports (appearance: base-select) {
+        .jlr-library-select,
+        .jlr-library-select::picker(select) {
+            appearance: base-select;
+        }
+
+        .jlr-library-select::picker(select) {
+            margin-top: 0.3rem;
+            padding: 0.3rem;
+            overflow: clip;
+            border: 1px solid color-mix(in srgb, var(--jlr-text) 18%, transparent);
+            border-radius: 0.5rem;
+            background: color-mix(in srgb, var(--jlr-surface) 94%, #000);
+            box-shadow: 0 0.55rem 1.4rem rgba(0, 0, 0, 0.38);
+            color: var(--jlr-text);
+        }
+
+        .jlr-library-select option {
+            padding: 0.5rem 0.7rem;
+            border-radius: 0.32rem;
+        }
+
+        .jlr-library-select option:hover,
+        .jlr-library-select option:checked {
+            background: color-mix(in srgb, var(--jlr-accent) 72%, var(--jlr-surface));
+            color: var(--jlr-text);
+        }
+    }
+}
+
+.jlr-library-button,
+.jlr-library-page-button {
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+}
+
+.jlr-library-select:focus-visible,
+.jlr-library-button:focus-visible,
+.jlr-library-page-button:focus-visible,
+.jlr-library-image:focus-visible,
+.jlr-library-card-title:focus-visible {
+    outline: 2px solid var(--jlr-accent-bright);
+    outline-offset: 2px;
+}
+
+.jlr-library-button:disabled,
+.jlr-library-page-button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.jlr-library-paging {
+    margin-left: auto;
+}
+
+.jlr-library-status {
+    min-width: 6.5rem;
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    font-size: 0.9rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.jlr-library-mode > .jlr-library-native-toolbar > :not(.jlr-library-controls),
+.jlr-library-mode > .focuscontainer-x:not(.jlr-library-native-toolbar),
+.jlr-library-mode > .alphaPicker,
+.jlr-library-mode > .alphaPicker-fixed-right,
+.jlr-library-mode > .itemsContainer {
+    display: none !important;
+}
+
+.jlr-cancel-button {
+    border-color: transparent;
+    background: transparent;
+}
+
+.jlr-cancel-button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--jlr-text) 10%, transparent);
+}
+
+.jlr-undo-button {
+    color: var(--jlr-accent-bright);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.jlr-library-controls.jlr-library-modern-controls {
+    width: calc(100% - 8%);
+    margin: 0.5rem 4%;
+}
+
+/* Jellyfin 12 Modern keeps its native count, paging, and sort controls in
+   the app bar. They describe the native grid, not personal-rating results. */
+body:has(#moviesPage .jlr-library-mode) .MuiToolbar-root:has([data-testid="SortByAlphaIcon"]) > :not(button) {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.jlr-library-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+    gap: 1.3rem 0.85rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.8rem 4%;
+}
+
+.jlr-library-results[hidden] {
+    display: none !important;
+}
+
+.jlr-library-card {
+    min-width: 0;
+    color: var(--jlr-text);
+}
+
+.jlr-library-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--jlr-surface) 82%, #000);
+    box-shadow: 0 0.2rem 0.75rem rgba(0, 0, 0, 0.32);
+    color: var(--jlr-text);
+    text-decoration: none;
+}
+
+.jlr-library-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.jlr-library-placeholder {
+    color: color-mix(in srgb, var(--jlr-text) 52%, transparent);
+    font-size: 3.2rem;
+}
+
+.jlr-library-placeholder[hidden] {
+    display: none !important;
+}
+
+.jlr-library-card-title {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-top: 0.55rem;
+    color: var(--jlr-text);
+    font-size: 0.94rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.jlr-library-card-meta {
+    min-height: 1.3em;
+    margin-top: 0.18rem;
+    color: color-mix(in srgb, var(--jlr-text) 62%, transparent);
+    font-size: 0.86rem;
+}
+
+.jlr-library-message {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 12rem;
+    color: color-mix(in srgb, var(--jlr-text) 72%, transparent);
+    text-align: center;
+}
+
+@media (max-width: 42rem) {
+    .jlr-panel {
+        width: calc(100% - 2rem);
+        padding: 1rem;
+    }
+
+    .jlr-panel-narrow {
+        margin-top: calc(var(--jlr-narrow-clearance, 0px) + 1rem);
+    }
+
+    .jlr-rating-grid {
+        grid-template-columns: repeat(5, minmax(2.1rem, 1fr));
+    }
+
+    .jlr-rating-button,
+    .jlr-clear-button,
+    .jlr-save-button,
+    .jlr-cancel-button,
+    .jlr-edit-button,
+    .jlr-expand-button {
+        min-height: 44px;
+    }
+
+    .jlr-title-row {
+        align-items: flex-start;
+    }
+
+    .jlr-current-rating {
+        flex-wrap: wrap;
+        margin-left: auto;
+    }
+
+    .jlr-review-heading-row {
+        align-items: flex-start;
+    }
+
+    .jlr-review-heading-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 0.35rem;
+    }
+
+    .jlr-library-bounds {
+        grid-column: 1 / -1;
+        grid-row: 3;
+    }
+
+    .jlr-library-controls {
+        display: grid;
+        align-items: center;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        padding: 0.7rem;
+    }
+
+    .jlr-library-heading {
+        grid-column: 1;
+        grid-row: 1;
+        text-align: left;
+    }
+
+    .jlr-library-field {
+        display: block;
+        min-width: 0;
+    }
+
+    .jlr-library-field-label {
+        display: none;
+    }
+
+    .jlr-library-rating-field {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .jlr-library-sort-field {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .jlr-library-controls > .jlr-library-button {
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+    }
+
+    .jlr-library-select,
+    .jlr-library-button,
+    .jlr-library-page-button {
+        min-height: 44px;
+    }
+
+    .jlr-library-select {
+        width: 100%;
+    }
+
+    .jlr-library-paging {
+        grid-column: 1 / -1;
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .jlr-library-results {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.9rem 0.55rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .jlr-library-card-title {
+        margin-top: 0.4rem;
+        font-size: 0.84rem;
+    }
+
+    .jlr-library-card-meta {
+        font-size: 0.78rem;
+    }
+}

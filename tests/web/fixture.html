@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Local Rating synthetic regression tests</title><link rel="stylesheet" href="/localrating.css">
+<style>body{background:#171717;color:#eee;font:16px sans-serif;margin:0}body.light{background:#fafafa;color:#171717;--jlr-surface:#fff;--jlr-text:#171717;--jlr-accent:#90caf9;--jlr-accent-bright:#1976d2}nav{padding:12px}button{min-height:44px}#report{white-space:pre-wrap;overflow-wrap:anywhere;padding:12px}.card{margin:12px}.detailPagePrimaryContainer{padding:12px}*{box-sizing:border-box}</style>
+</head><body><nav><button id="run">Run regression tests</button> <button id="library">Library</button> <button id="detail">Detail</button> <button id="long">Long review fixture</button></nav>
+<pre id="report">Synthetic data only; no Jellyfin account or media accessed.</pre><main id="fixture"></main>
+<script>if (new URLSearchParams(location.search).get('theme') === 'light') document.body.classList.add('light');</script>
+<script src="/fixture.js"></script><script src="/localrating.js"></script></body></html>

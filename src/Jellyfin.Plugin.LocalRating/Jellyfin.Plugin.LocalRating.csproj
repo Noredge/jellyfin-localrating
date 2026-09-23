@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>13.0</LangVersion>
+    <AssemblyName>Jellyfin.Plugin.LocalRating</AssemblyName>
+    <RootNamespace>Jellyfin.Plugin.LocalRating</RootNamespace>
+    <Version>0.6.1</Version>
+    <AssemblyVersion>0.6.1.0</AssemblyVersion>
+    <FileVersion>0.6.1.0</FileVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Jellyfin.Controller" Version="12.0.0" ExcludeAssets="runtime" />
+    <PackageReference Include="Jellyfin.Model" Version="12.0.0" ExcludeAssets="runtime" />
+    <!-- Match Jellyfin 12.0.0's shared runtime assembly exactly. -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.11" ExcludeAssets="runtime" />
+    <!-- Keep restore/audit on the patched SQLitePCLRaw line without shipping
+         private copies that would conflict with Jellyfin's shared runtime. -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.12" ExcludeAssets="runtime" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.12" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Web\localrating.css" LogicalName="Jellyfin.Plugin.LocalRating.Web.localrating.css" />
+    <EmbeddedResource Include="Web\localrating.js" LogicalName="Jellyfin.Plugin.LocalRating.Web.localrating.js" />
+    <EmbeddedResource Include="Web\configuration.html" LogicalName="Jellyfin.Plugin.LocalRating.Web.configuration.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Jellyfin.Plugin.LocalRating.Tests" />
+  </ItemGroup>
+</Project>

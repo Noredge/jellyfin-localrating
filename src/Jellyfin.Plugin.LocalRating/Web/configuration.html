@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html><head><title>Local Rating</title></head><body>
+<div id="localRatingConfiguration" data-role="page" class="page type-interior pluginConfigurationPage">
+    <style>
+        #localRatingConfiguration [hidden] { display: none !important; }
+        #localRatingConfiguration button:disabled { opacity: 0.55; cursor: default; }
+    </style>
+    <div data-role="content"><div class="content-primary">
+        <h2>跨客户端个人评分（试验功能）</h2>
+        <p>在选定账号和电影库的受支持请求中，将社区评分临时显示为该账号的个人评分，并用于评分排序。未评分显示为空。关闭后恢复原社区评分，无需还原数据。</p>
+        <p>目前支持电影列表；详情页、集合折叠和部分客户端请求仍可能显示原社区评分。客户端缓存可能需要刷新。</p>
+        <p>电视端使用同一账号进入已选电影库，选择“社区评分 / Community Rating”排序并刷新列表。</p>
+        <form id="localRatingConfigurationForm">
+            <fieldset id="lrConfigurationFields" disabled style="border:0;padding:0;margin:0;min-width:0">
+            <label class="checkboxContainer"><input is="emby-checkbox" type="checkbox" id="lrCompatibilityEnabled"><span>启用跨客户端个人评分</span></label>
+            <p>勾选允许启用的账号与电影库组合。没有勾选媒体库的账号不会启用。</p>
+            <div id="lrCompatibilityRules"></div>
+            </fieldset>
+            <p id="lrConfigurationSummary"></p>
+            <p id="lrConfigurationStatus" role="status" aria-live="polite"></p>
+            <button is="emby-button" type="button" id="lrConfigurationRetry" class="raised" hidden>重新读取</button>
+            <button is="emby-button" type="submit" id="lrConfigurationSave" class="raised button-submit block" disabled><span>保存</span></button>
+        </form>
+    </div></div>
+    <script>
+    (function () {
+        'use strict';
+        const pluginId = 'd67e52c4-19ca-48ba-81f0-ea6fe703896b';
+        const page = document.querySelector('#localRatingConfiguration');
+        const form = page.querySelector('form');
+        const enabled = page.querySelector('#lrCompatibilityEnabled');
+        const rules = page.querySelector('#lrCompatibilityRules');
+        const status = page.querySelector('#lrConfigurationStatus');
+        const save = page.querySelector('#lrConfigurationSave');
+        const fields = page.querySelector('#lrConfigurationFields');
+        const summary = page.querySelector('#lrConfigurationSummary');
+        const retry = page.querySelector('#lrConfigurationRetry');
+        let configuration;
+        let savedSelection;
+        let busy = false;
+        let revision = 0;
+        const normalize = value => String(value || '').replace(/-/g, '').toLowerCase();
+        const selection = () => ({
+            EnableRatingCompatibility: enabled.checked,
+            CompatibilityRules: Array.from(rules.querySelectorAll('fieldset')).map(fieldset => ({
+                UserId: fieldset.dataset.userId,
+                LibraryIds: Array.from(fieldset.querySelectorAll('input:checked')).map(input => input.value)
+            })).filter(rule => rule.LibraryIds.length)
+        });
+        const refresh = () => {
+            const selected = selection();
+            const count = selected.CompatibilityRules.reduce((total, rule) => total + rule.LibraryIds.length, 0);
+            // Jellyfin translates template placeholders in embedded HTML before executing this script.
+            summary.textContent = (enabled.checked ? '启用' : '关闭') + ' · 已选 ' + selected.CompatibilityRules.length
+                + ' 个账号、' + count + ' 个账号与电影库组合';
+            save.disabled = busy || !configuration || JSON.stringify(selected) === savedSelection;
+            save.querySelector('span').textContent = busy ? '正在保存…' : '保存';
+        };
+        async function load() {
+            const current = ++revision;
+            configuration = undefined;
+            busy = false;
+            fields.disabled = true;
+            save.disabled = true;
+            retry.hidden = true;
+            summary.textContent = '';
+            rules.replaceChildren();
+            status.textContent = '正在读取设置…';
+            try {
+                const [config, users, libraries] = await Promise.all([
+                    ApiClient.getPluginConfiguration(pluginId), ApiClient.getUsers(), ApiClient.getVirtualFolders()
+                ]);
+                if (current !== revision) return;
+                configuration = config;
+                enabled.checked = config.EnableRatingCompatibility === true;
+                rules.replaceChildren();
+                users.forEach(user => {
+                    const fieldset = document.createElement('fieldset');
+                    fieldset.style.marginBottom = '1.5em';
+                    fieldset.dataset.userId = user.Id;
+                    const legend = document.createElement('legend');
+                    legend.textContent = user.Name;
+                    fieldset.append(legend);
+                    const selected = (config.CompatibilityRules || []).filter(rule => normalize(rule.UserId) === normalize(user.Id))
+                        .flatMap(rule => rule.LibraryIds || []).map(normalize);
+                    libraries.filter(library => library.CollectionType === 'movies').forEach(library => {
+                        const label = document.createElement('label');
+                        label.className = 'checkboxContainer';
+                        const input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.setAttribute('is', 'emby-checkbox');
+                        input.value = library.ItemId;
+                        input.checked = selected.includes(normalize(library.ItemId));
+                        const text = document.createElement('span');
+                        text.textContent = library.Name;
+                        label.append(input, text);
+                        fieldset.append(label);
+                    });
+                    rules.append(fieldset);
+                });
+                savedSelection = JSON.stringify(selection());
+                fields.disabled = false;
+                status.textContent = libraries.some(library => library.CollectionType === 'movies')
+                    ? '已读取保存的设置。修改后请点击保存。'
+                    : '暂无电影库。请先在 Jellyfin 添加电影库，再重新打开此页。';
+                refresh();
+            } catch (_) {
+                if (current !== revision) return;
+                status.textContent = '读取失败，请检查连接后重新读取。';
+                retry.hidden = false;
+            }
+        }
+        page.addEventListener('viewshow', load);
+        retry.addEventListener('click', load);
+        page.addEventListener('viewhide', () => {
+            revision++;
+            configuration = undefined;
+            fields.disabled = true;
+            save.disabled = true;
+        });
+        form.addEventListener('change', () => {
+            if (busy || !configuration) return;
+            refresh();
+            status.textContent = save.disabled ? '与已保存的设置一致。' : '设置尚未保存。点击保存后生效。';
+        });
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!configuration || save.disabled) return;
+            const selections = selection().CompatibilityRules;
+            if (enabled.checked && !selections.length) {
+                status.textContent = '请至少选择一个账号与电影库组合，或关闭此功能。';
+                return;
+            }
+            const current = revision;
+            busy = true;
+            fields.disabled = true;
+            refresh();
+            status.textContent = '正在保存…';
+            try {
+                const updated = Object.assign({}, configuration, { EnableRatingCompatibility: enabled.checked, CompatibilityRules: selections });
+                await ApiClient.updatePluginConfiguration(pluginId, updated);
+                if (current !== revision) return;
+                configuration = updated;
+                savedSelection = JSON.stringify(selection());
+                status.textContent = '已保存。请刷新客户端列表以查看效果。';
+            } catch (_) {
+                if (current === revision) status.textContent = '保存失败，已保留本页选择，请重试。';
+            } finally {
+                if (current === revision) {
+                    busy = false;
+                    fields.disabled = false;
+                    refresh();
+                }
+            }
+        });
+    }());
+    </script>
+</div></body></html>

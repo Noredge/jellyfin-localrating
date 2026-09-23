@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.400
+          cache: true
+          cache-dependency-path: |
+            **/packages.lock.json
+            NuGet.Config
+
+      - name: Build and test
+        shell: pwsh
+        run: ./scripts/verify.ps1
+
+      - name: Package plugin
+        shell: pwsh
+        run: ./scripts/package.ps1
+
+      - name: Upload install package
+        uses: actions/upload-artifact@v4
+        with:
+          name: LocalRating-${{ github.sha }}
+          path: outputs/LocalRating_*.zip
+          if-no-files-found: error
+          retention-days: 14

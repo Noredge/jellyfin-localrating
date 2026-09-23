@@ -1,0 +1,12 @@
+name: Local Rating
+guid: d67e52c4-19ca-48ba-81f0-ea6fe703896b
+version: 0.6.1.0
+targetAbi: 12.0.0.0
+framework: net10.0
+owner: local
+overview: Private per-user ratings and reviews for Jellyfin Web.
+description: Stores ratings in Jellyfin UserData and private review text in a plugin-local SQLite database.
+category: General
+artifacts:
+  - Jellyfin.Plugin.LocalRating.dll
+changelog: Improves review failure recovery, keyboard saving, theme contrast and sticky feedback; prevents misleading settings saves and stale responses.
